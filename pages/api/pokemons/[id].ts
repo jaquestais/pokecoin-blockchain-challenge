@@ -15,7 +15,7 @@ export default async function handler(
 
     if (req.method === 'GET') {
         promiseHandler({
-            action: async () =>  await pokemon.get(id),
+            action: async () =>  await pokemon.get(id as string),
             callbackSuccess: (data: any) => {
                 console.log('pkm-data: ', data)
                 res.status(200).json({ status: 'success', message: 'Pokemon encontrado com sucesso!' })
