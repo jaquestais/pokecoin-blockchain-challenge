@@ -34,6 +34,7 @@
       "@template/*": ["components/templates/*"],
       "@constant/*": ["constants/*"],
       "@context/*": ["contexts/*"],
+      "@domain/*": ["domains/*"],
       "@hook/*": ["hooks/*"],
       "@util/*": ["utils/*"],
       "@api/*": ["apis/*"],

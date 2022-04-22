@@ -7,7 +7,8 @@ const nextConfig = {
   },
   images: {
     domains: ['https://pokeapi.co/api/v2/'],
-  }
+  },
 }
 
 module.exports = nextConfig
+

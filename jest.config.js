@@ -19,6 +19,7 @@ const customJestConfig = {
         '^@template/(.*)$': '<rootDir>/components/templates/$1',
         '^@constant/(.*)$': '<rootDir>/constants/$1',
         '^@context/(.*)$': '<rootDir>/contexts/$1',
+        '^@domain/(.*)$': '<rootDir>/domains/$1',
         '^@hook/(.*)$': '<rootDir>/hooks/$1',
         '^@util/(.*)$': '<rootDir>/utils/$1',
         '^@api/(.*)$': '<rootDir>/apis/$1',
