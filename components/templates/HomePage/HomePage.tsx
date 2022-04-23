@@ -10,7 +10,6 @@ import Card from '@element/Card'
 import SimpleSearchForm from '@module/SimpleSearchForm/SimpleSearchForm'
 import Wallet from '@domain/Wallet'
 import Image from 'next/image'
-import walletAPI from '@api/walletAPI/walletAPI'
 import { Pokemon } from '@domain/Pokemon'
 
 interface IComponentProps {
@@ -18,7 +17,7 @@ interface IComponentProps {
 }
 
 const HomePage: FC<IComponentProps> = ({ wallet }) => {
-    const [{ loading, response, error }, setApi] = useApi()
+    const [{ loading, response }, setApi] = useApi()
 
     return (
         <HomePageStyle>
