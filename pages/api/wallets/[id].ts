@@ -20,7 +20,7 @@ export default async function handler(
         const { id } = req.query
         
         if (!id || Array.isArray(id)) res.status(400).send({ status: 'error', message: 'Wallet Id inválido' })
-        
+        console.log('wall')
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.getUserWallet(id as string),
             callbackSuccess: (data: any) => res.status(200).json({ status: 'success', message: 'Wallet encontrada com sucesso!', data }),

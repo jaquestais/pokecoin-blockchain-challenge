@@ -16,7 +16,6 @@ export default async function handler(
 ) {    
 
     const getMappedPokemon = (data: any): Pokemon => ({
-            _id: data?._id,
             name: data?.name,
             image: data?.sprites?.front_default,
             baseExperience: data?.base_experience,

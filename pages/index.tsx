@@ -1,16 +1,19 @@
 import fetchAPI from '@api/fetchAPI'
 import serverRequestAPI from '@api/serverRequestAPI'
-import Wallet from '@domain/Wallet'
+import { PokemonWallet } from '@domain/Pokemon'
 import Default from '@layout/Default/Default'
 import HomePage from '@template/HomePage/HomePage'
 import { GetServerSideProps } from 'next/types'
 import { FC } from 'react'
 
 interface IComponentProps {
-    wallet: Wallet,
+    wallet: PokemonWallet,
 }
 
 const Home: FC<IComponentProps> = ({ wallet }) => {
+    console.log('home', wallet)
+    debugger
+
     return (
         <Default>
             <HomePage wallet={wallet} />
@@ -19,20 +22,23 @@ const Home: FC<IComponentProps> = ({ wallet }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    let wallet = null
+    let walletData: PokemonWallet;
 
     fetchAPI({
         input: serverRequestAPI.getUserWallet(),
         callbackSuccess: async (response: any) => {
-            wallet = response.data
+            console.log('response', JSON.stringify(response))
+            walletData = await response.data
         },
-        // callbackError: , TODO: redirecionamento para login e criação de carteira 
+        // callbackError: , redirecionamento para login e criação de carteira 
     })
+
+    console.log('oi', walletData)
 
     return {
         props:
         {
-            wallet
+            wallet: await walletData,
         }
     }
 }

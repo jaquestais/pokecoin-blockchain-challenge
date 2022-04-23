@@ -8,26 +8,26 @@ import useApi from '@hook/useApi'
 import serverRequestAPI from '@api/serverRequestAPI'
 import Card from '@element/Card'
 import SimpleSearchForm from '@module/SimpleSearchForm/SimpleSearchForm'
-import Wallet from '@domain/Wallet'
 import Image from 'next/image'
-import { Pokemon } from '@domain/Pokemon'
+import { Pokemon, PokemonWallet } from '@domain/Pokemon'
 
 interface IComponentProps {
-    wallet: Wallet,
+    wallet: PokemonWallet,
 }
 
 const HomePage: FC<IComponentProps> = ({ wallet }) => {
     const [{ loading, response }, setApi] = useApi()
+    console.log('wallet: ', wallet)
 
     return (
         <HomePageStyle>
-            <Container gap="md">
-                <Card>
+            <Container gap="md" direction='column' align='center'>
+                <Card maxWidth={450}>
                     <SimpleSearchForm
                         loading={loading}
                         field={{
                             name: 'pokemon',
-                            label: 'Nome ou ID:',
+                            label: 'Nome ou ID',
                         }}
                         onSubmit={({ pokemon }: any) => setApi(serverRequestAPI.getPokemon(pokemon.value))}
                     >
@@ -35,14 +35,15 @@ const HomePage: FC<IComponentProps> = ({ wallet }) => {
                     </SimpleSearchForm>
                 </Card>
                 {response?.data as Pokemon && <Card solid maxWidth={340}>
-                    <Form loading={loading} onSubmit={() => setApi(`${process.env.NEXT_PUBLIC_HOST_URL}api/wallets/${wallet._id}`)}>
+                    <Form loading={loading} onSubmit={() => setApi(serverRequestAPI.saveWallet({ ...wallet, assets: [...wallet.assets, response?.data] }))}>
                         <h2>Cadastre o Pokemon encontrado abaixo:</h2>
-                        <Image src={response?.data.image} alt={`Imagem do pokemon ${response?.data.name}`} objectFit="cover" objectPosition="top" height={290} width={273} />
-                        <h3>{response?.data.name}</h3>                        <dl>
+                        <Image src={response?.data.image} alt={`Imagem do pokemon ${response?.data.name}`} objectFit="cover" objectPosition="center" height={120} width={120} />
+                        <h3>{response?.data.name}</h3>
+                        <dl>
                             <dt>Base experience:</dt>
                             <dd>{response?.data.baseExperience || 'desconhecido :('}</dd>
                         </dl>
-                        <Button type="submit">Cadastrar</Button>
+                        <Button type="submit" light>Cadastrar</Button>
                     </Form>
                 </Card>}
             </Container>
