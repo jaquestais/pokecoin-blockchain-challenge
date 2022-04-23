@@ -1,33 +1,35 @@
 import fetchApi from "@api/fetchAPI"
 import { useEffect, useState } from "react"
 
-const useApi = (inputInit?: RequestInfo | URL): [{ data: any, loading: boolean, error: any }, Function] => {
+const useApi = (inputInit?: RequestInfo | URL): [{ response: any, loading: boolean, error: any }, Function] => {
     const [input, setInput] = useState<RequestInfo | URL | undefined>(inputInit)
     const [loading, setLoading] = useState<boolean>(false)
-    const [data, setData] = useState<any>(null)
+    const [response, setResponse] = useState<any>(null)
     const [error, setError] = useState<any>(null)
 
     useEffect(() => {
         if (!input) return
 
-        console.log('entrou no useeffect useApi')
-
         setLoading(true)
+        setResponse(null)
+        setError(null)
 
         input && fetchApi({
             input,
-            callbackSuccess: (data: any) => {
-                debugger
-                setData(data)
+            callbackSuccess: (response: any) => {
+                console.log('useAPI Data: ', response)
+                setResponse(response)
                 setLoading(false)
-            }, callbackError: (error: any) => {
-                setError(error)
+            }, callbackError: (response: any) => {
+                console.log('useAPI Data: ', response)
+
+                setError(response?.error ? response?.error : error)
                 setLoading(false)
             }
         })
     }, [input])
 
-    return [{ data, loading, error }, setInput]
+    return [{ response, loading, error }, setInput]
 }
 
 export default useApi

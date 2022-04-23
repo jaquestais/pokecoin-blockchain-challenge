@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const getDatabaseConnection = async () => {
+const getDatabaseConnectionAPI = async () => {
     const client = new MongoClient(process.env.MONGODB_URI!);
     await client.connect();
 
@@ -9,4 +9,4 @@ const getDatabaseConnection = async () => {
     return db
 }
 
-export default getDatabaseConnection
+export default getDatabaseConnectionAPI

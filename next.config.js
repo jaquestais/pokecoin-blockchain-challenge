@@ -6,7 +6,7 @@ const nextConfig = {
     styledComponents: true,
   },
   images: {
-    domains: ['https://pokeapi.co/api/v2/'],
+    domains: ['pokeapi.co', 'raw.githubusercontent.com'],
   },
 }
 

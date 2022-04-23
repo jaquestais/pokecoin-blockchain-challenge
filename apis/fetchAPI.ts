@@ -1,11 +1,14 @@
 import { IFetch } from "@type/API"
-import promiseHandler from "./promiseHandlerAPI"
+import promiseHandlerAPI from "./promiseHandlerAPI"
 
-const fetchAPI = async ({ input, callbackSuccess, callbackError }: IFetch) => {
-    promiseHandler( { action: async () => {
-        const response = await fetch(input)
-        return await response.json()
-    }, callbackSuccess, callbackError })
+const fetchAPI = ({ input, callbackSuccess, callbackError }: IFetch) => {
+    
+    promiseHandlerAPI({ action: async () => await fetch(input), callbackSuccess: async (response: any) => {
+        if (callbackSuccess) {
+            const data = await response.json()
+            callbackSuccess(data)
+        }
+    }, callbackError })
 }
 
 export default fetchAPI
