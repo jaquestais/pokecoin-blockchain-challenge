@@ -1,5 +1,7 @@
+import coinAPI from '@api/coinAPI/coinAPI'
 import fetchAPI from '@api/fetchAPI'
 import pokemonAPI from '@api/pokemonAPI/pokemonAPI'
+import { SATOSHI } from '@constant/bitcoinStandard'
 import { Pokemon } from '@domain/Pokemon'
 import IMessage from '@type/Message'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -15,13 +17,17 @@ export default async function handler(
     res: NextApiResponse<ResponseData>
 ) {    
 
-    const getMappedPokemon = (data: any): Pokemon => ({
+    const getMappedPokemon = (data: any, coinData: any): Pokemon => {
+
+        return {
             name: data?.name,
             image: data?.sprites?.front_default,
             baseExperience: data?.base_experience,
             registerDatetime: new Date().getTime(),
+            costBasis: coinData?.rate * data?.base_experience * SATOSHI,
+            active: true,
         }
-    )
+    }
     
     if (req.method === 'GET') {
         const { id } = req.query
@@ -33,10 +39,10 @@ export default async function handler(
         }
         
         fetchAPI({
-            input: await pokemonAPI.getRequestInfo(id as string),
-            callbackSuccess: async (response: any) => {
+            input: [pokemonAPI.getRequestInfo(id as string), coinAPI.getRequestInfo()],
+            callbackSuccess: async ([pokemonResponse, coinResponse]: any) => {
                 res.status(200)
-                res.json({ message: { status: 'success', description: 'Pokemon encontrado com sucesso!' }, data: getMappedPokemon(response) })
+                res.json({ message: { status: 'success', description: 'Pokemon encontrado com sucesso!' }, data: getMappedPokemon(pokemonResponse, coinResponse) })
                 res.end()
             },
             callbackError: (error: any) => {

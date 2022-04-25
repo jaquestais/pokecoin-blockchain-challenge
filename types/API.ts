@@ -1,5 +1,5 @@
 interface IFetch {
-    input:  RequestInfo | URL,
+    input: Array<RequestInfo | URL> | RequestInfo | URL,
     callbackSuccess?: Function,
     callbackError?: Function
 }

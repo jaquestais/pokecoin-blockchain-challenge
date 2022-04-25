@@ -14,19 +14,17 @@ import Wallet from '@domain/Wallet'
 const HomePage: FC = () => {
     const [{ loading, response, error }, setApi] = useApi()
     const { state: wallet, dispatch } = useContext(WalletContext)
-    const awaitingChange = useRef<{ modifying: boolean, condition: boolean }>({ modifying: false, condition: !!(wallet._id && wallet.assets.length > 0) })
+    const awaitingChange = useRef<boolean>(false)
 
     const addAsset = (pokemon: Pokemon) => {
         dispatch({ type: Actions.ADD_ASSET, asset: pokemon })
-        awaitingChange.current.modifying = true
+        awaitingChange.current = true
     }
 
     useEffect(() => {
-        const { current: { modifying, condition } } = awaitingChange
-
-        if (modifying && condition) {
+        if (awaitingChange.current) {
             setApi(serverRequestAPI.saveWallet(wallet))
-            awaitingChange.current.modifying = false
+            awaitingChange.current = false
         }
 
     }, [wallet])
@@ -59,6 +57,8 @@ const HomePage: FC = () => {
                     <dl>
                         <dt>Base experience:</dt>
                         <dd>{response?.data.baseExperience || 'desconhecido :('}</dd>
+                        <dt>Cost basis:</dt>
+                        <dd>{response?.data.costBasis || 'desconhecido :('}</dd>
                     </dl>
                 </SimpleActionCard>
             </Card>}

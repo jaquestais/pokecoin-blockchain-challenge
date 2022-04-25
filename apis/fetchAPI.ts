@@ -3,9 +3,24 @@ import promiseHandlerAPI from "./promiseHandlerAPI"
 
 const fetchAPI = ({ input, callbackSuccess, callbackError }: IFetch) => {
     
-    promiseHandlerAPI({ action: async () => await fetch(input as RequestInfo), callbackSuccess: async (response: any) => {
+    promiseHandlerAPI({ 
+        action: async () => {
+            if (Array.isArray(input)) {
+                return await Promise.all(input.map(value => fetch(value)))
+            } else {
+                return await fetch(input)
+            }
+        },
+        callbackSuccess: async (response: any) => {
         if (callbackSuccess) {
-            const data = await response.json()
+            let data
+
+            if (Array.isArray(response)) {
+                data = await Promise.all(response.map(value => value.json()))
+            } else {
+                data = await response.json()
+            }
+            
             callbackSuccess(data)
         }
     }, callbackError })

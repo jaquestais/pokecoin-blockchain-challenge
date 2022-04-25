@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react'
+import { FC, useContext, useEffect, useRef } from 'react'
 import { } from '@type/CustomTheme'
 import Container from '@element/Container'
 import useApi from '@hook/useApi'
@@ -8,22 +8,26 @@ import SimpleSearchForm from '@module/SimpleSearchForm/SimpleSearchForm'
 import { Pokemon, PokemonWallet } from '@domain/Pokemon'
 import SimpleActionCard from '@module/SimpleActionCard/SimpleActionCard'
 import WalletContext from '@context/Wallet/Context'
+import Actions from '@context/Wallet/Actions'
+import Wallet from '@domain/Wallet'
 
-interface IComponentProps {
-    wallet: PokemonWallet,
-}
-
-const Acquisition: FC<IComponentProps> = ({ wallet }) => {
-    const { state } = useContext(WalletContext)
-
+const AcquisitionPage: FC = () => {
     const [{ loading, response, error }, setApi] = useApi()
-    console.log('state: ', state)
-    console.log('wallet: ', wallet)
+    const { state: wallet, dispatch } = useContext(WalletContext)
+    const awaitingChange = useRef<boolean>(false)
 
-    const saveWallet = () => {
-        wallet.assets.push(response?.data)
-        return serverRequestAPI.saveWallet(wallet)
+    const addAsset = (pokemon: Pokemon) => {
+        dispatch({ type: Actions.ADD_ASSET, asset: pokemon })
+        awaitingChange.current = true
     }
+
+    useEffect(() => {
+        if (awaitingChange.current) {
+            setApi(serverRequestAPI.saveWallet(wallet))
+            awaitingChange.current = false
+        }
+
+    }, [wallet])
 
     return (
         <Container gap="md" direction='column' >
@@ -42,7 +46,7 @@ const Acquisition: FC<IComponentProps> = ({ wallet }) => {
             {response?.data as Pokemon && <Card solid maxWidth={340}>
                 <SimpleActionCard
                     loading={loading}
-                    onSubmit={() => setApi(saveWallet)}
+                    onSubmit={() => addAsset(response.data)}
                     title='Cadastre o Pokemon encontrado abaixo:'
                     image={response?.data.image}
                     alt={`Imagem do pokemon ${response?.data.name}`}
@@ -53,6 +57,8 @@ const Acquisition: FC<IComponentProps> = ({ wallet }) => {
                     <dl>
                         <dt>Base experience:</dt>
                         <dd>{response?.data.baseExperience || 'desconhecido :('}</dd>
+                        <dt>Cost basis:</dt>
+                        <dd>{response?.data.costBasis || 'desconhecido :('}</dd>
                     </dl>
                 </SimpleActionCard>
             </Card>}
@@ -60,4 +66,4 @@ const Acquisition: FC<IComponentProps> = ({ wallet }) => {
     )
 }
 
-export default Acquisition
+export default AcquisitionPage
