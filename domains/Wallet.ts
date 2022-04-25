@@ -1,7 +1,9 @@
 import { ObjectId } from "mongodb";
 
 interface Asset {
-    _id?: ObjectId
+    _id?: ObjectId,
+    active?: boolean,
+    costBasis: number,
 }
 
 class Wallet {

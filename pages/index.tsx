@@ -1,46 +1,31 @@
-import fetchAPI from '@api/fetchAPI'
 import serverRequestAPI from '@api/serverRequestAPI'
-import { PokemonWallet } from '@domain/Pokemon'
+import Actions from '@context/Wallet/Actions'
+import WalletContext from '@context/Wallet/Context'
+import useApi from '@hook/useApi'
 import Default from '@layout/Default/Default'
 import HomePage from '@template/HomePage/HomePage'
-import { GetServerSideProps } from 'next/types'
-import { FC } from 'react'
+import { FC, useContext, useEffect } from 'react'
 
-interface IComponentProps {
-    wallet: PokemonWallet,
-}
+const Home: FC = () => {
+    const [{ response }, setApi] = useApi()
+    const { state: wallet, dispatch } = useContext(WalletContext)
 
-const Home: FC<IComponentProps> = ({ wallet }) => {
-    console.log('home', wallet)
-    debugger
+    useEffect(() => {
+        if (!wallet?._id && response?.data) {
+
+            dispatch({ type: Actions.FILL_WALLET, wallet: response.data })
+        } else if (!wallet._id) {
+
+            setApi(serverRequestAPI.getUserWallet())
+        }
+
+    }, [response])
 
     return (
         <Default>
-            <HomePage wallet={wallet} />
+            {wallet._id && <HomePage />}
         </Default>
     )
-}
-
-export const getServerSideProps: GetServerSideProps = async () => {
-    let walletData: PokemonWallet;
-
-    fetchAPI({
-        input: serverRequestAPI.getUserWallet(),
-        callbackSuccess: async (response: any) => {
-            console.log('response', JSON.stringify(response))
-            walletData = await response.data
-        },
-        // callbackError: , redirecionamento para login e criação de carteira 
-    })
-
-    console.log('oi', walletData)
-
-    return {
-        props:
-        {
-            wallet: await walletData,
-        }
-    }
 }
 
 export default Home

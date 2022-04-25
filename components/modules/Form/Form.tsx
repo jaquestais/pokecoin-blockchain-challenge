@@ -1,4 +1,5 @@
 import { IState } from '@type/CustomTheme'
+import IMessage from '@type/Message'
 import { FC, FormEvent, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Loader from '../../elements/Loader'
@@ -6,7 +7,7 @@ import Loader from '../../elements/Loader'
 interface ComponentProps {
     onSubmit?: Function,
     loading?: boolean,
-    message?: { state: string, description: string }
+    message?: IMessage,
     children: ReactNode,
 }
 

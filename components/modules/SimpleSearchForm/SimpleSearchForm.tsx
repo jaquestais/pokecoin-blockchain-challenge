@@ -1,9 +1,8 @@
 import { FC, ReactNode } from 'react'
-import styled from 'styled-components'
 import { } from '@type/CustomTheme'
 import Form from '@module/Form/Form'
 import Button from '@element/Button'
-import IInputField from '@type/InputField'
+import { IInputField } from '@type/Form'
 
 interface IComponentProps {
     loading?: boolean,
@@ -15,7 +14,7 @@ interface IComponentProps {
 const SimpleSearchForm: FC<IComponentProps> = ({ loading, onSubmit, field, children }) => {
 
     return (
-        <SimpleSearchFormStyle>
+        <section>
             <Form loading={loading} onSubmit={(target: any) => onSubmit(target)}>
                 <h2>{children}</h2>
                 <label htmlFor={field.name}>{field.label}:</label>
@@ -23,11 +22,7 @@ const SimpleSearchForm: FC<IComponentProps> = ({ loading, onSubmit, field, child
 
                 <Button type="submit">Procurar</Button>
             </Form>
-        </SimpleSearchFormStyle>
+        </section>
     )
 }
-
-const SimpleSearchFormStyle = styled.section`
-`
-
 export default SimpleSearchForm

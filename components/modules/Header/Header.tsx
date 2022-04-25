@@ -1,14 +1,17 @@
 import { FC, ReactNode } from 'react'
 import { } from '@type/CustomTheme'
 import styled, { css } from 'styled-components'
+import Container from '@element/Container'
 
 const Header: FC<{ children?: ReactNode }> = ({ children }) => {
     return (
         <HeaderStyle>
-            <h1>
-                <NoWrap>&harr; Wallet de</NoWrap> <NoWrap>Pokemons &harr;</NoWrap>
-            </h1>
-            {children}
+            <Container gap='sm'>
+                <h1>
+                    <NoWrap>&harr; Wallet de</NoWrap> <NoWrap>Pokemons &harr;</NoWrap>
+                </h1>
+                {children}
+            </Container>
         </HeaderStyle>
     )
 }
@@ -16,7 +19,6 @@ const Header: FC<{ children?: ReactNode }> = ({ children }) => {
 const HeaderStyle = styled.header`
 ${({ theme: { backgrounds, spacings } }) => css`
     background-color: ${backgrounds.secondary};
-    padding: ${spacings.sm}px;
     margin-bottom: ${spacings.sm}px;
 `}`
 

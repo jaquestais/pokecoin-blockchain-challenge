@@ -4,4 +4,4 @@ interface IInputField {
     input?: string,
 }
 
-export default IInputField
+export type { IInputField }
