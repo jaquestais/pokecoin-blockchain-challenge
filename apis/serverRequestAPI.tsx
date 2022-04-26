@@ -1,4 +1,6 @@
+import { Pokemon } from "@domain/Pokemon"
 import Wallet, { Asset } from "@domain/Wallet"
+import { ObjectId } from "mongodb"
 
 const requestInit: RequestInit = {}
 
@@ -24,10 +26,10 @@ const saveWalletAsset = (wallet: Wallet, newAsset: Asset) => {
     return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)
 }
 
-const saveWalletAssetInactive = (wallet: Wallet, asset: Asset) => {
+const saveWalletAssetInactive = (wallet: Wallet, asset: Pokemon) => {
     const requestInit: RequestInit = {
         method: 'put',
-        body: JSON.stringify({ wallet, asset }),
+        body: JSON.stringify({ wallet, assetId: asset?._id?.toString() }),
     }
 
     return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)

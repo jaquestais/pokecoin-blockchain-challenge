@@ -18,9 +18,7 @@ export default async function handler(
     res: NextApiResponse<ResponseData>
 ) {    
 
-    const getMappedPokemon = (data: any, coinData: any): Pokemon => {
-        console.log('coin', coinData)
-        return {
+    const getMappedPokemon = (data: any, coinData: any): Pokemon => ({
             _id: new ObjectId(),
             name: data?.name,
             image: data?.sprites?.front_default,
@@ -29,8 +27,7 @@ export default async function handler(
             inactiveDatetime: undefined,
             costBasis: coinData?.rate * data?.base_experience * SATOSHI,
             active: true,
-        }
-    }
+    })
     
     if (req.method === 'GET') {
         const { id } = req.query
@@ -49,12 +46,13 @@ export default async function handler(
                 res.end()
             },
             callbackError: async (response: any) => {
-                res.status(500)
+                res.status(404)
                 res.send({ message: { status: 'error', description: 'Pokemon não encontrado, tente outro nome ou Id' }, error: response })  
                 res.end()
             }
         })
     } else {
+        res.status(404)
         res.end()
     }
 }

@@ -56,21 +56,17 @@ export default async function handler(
             }        
         })
     } else if (req.method === 'PUT') {
-        const { wallet, newAsset, asset }: { wallet: PokemonWallet, newAsset: Pokemon, asset: Pokemon} = JSON.parse(req.body)
-        console.log('oi', wallet, newAsset, asset)
+        const { wallet, newAsset, assetId }: { wallet: PokemonWallet, newAsset: Pokemon, assetId: string} = JSON.parse(req.body)
         wallet._id = new ObjectId(wallet._id)
         
         if (newAsset) {
             wallet.assets.push(newAsset)
-        } else if (asset) {
-            const modifiedAssets = wallet.assets
-            const index = modifiedAssets.indexOf(asset)
+        } else if (assetId) {
+            const index = wallet.assets.findIndex((asset: Pokemon) => asset._id?.toString() === assetId)
             if (index >= 0) {
-                modifiedAssets[index].active = false
-                modifiedAssets[index].inactiveDatetime = new Date().getTime()
+                wallet.assets[index].active = false
+                wallet.assets[index].inactiveDatetime = new Date().getTime()
             }
-
-            wallet.assets = modifiedAssets
         }
 
 

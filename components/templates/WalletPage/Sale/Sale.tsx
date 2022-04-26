@@ -11,14 +11,15 @@ import { Pokemon } from '@domain/Pokemon'
 
 interface IComponentProps {
     store: MutableRefObject<Wallet>,
+    set: Function,
 }
 
-const SaleTemplate: FC<IComponentProps> = ({ store }) => {
+const SaleTemplate: FC<IComponentProps> = ({ store, set }) => {
     const [pokemon, setPokemon] = useState<Pokemon>()
     const [message, setMessage] = useState<IMessage>()
 
     const handleSubmit = ({ pokemon }: any) => {
-        const asset = store.current.assets.find(asset => asset._id === pokemon.value || pokemon.value === asset.name)
+        const asset = store.current.assets.find(asset => asset.active && (asset._id === pokemon.value || pokemon.value === asset.name))
         if (asset) {
             setPokemon(asset as Pokemon)
             setMessage({ status: 'success', description: 'Pokemon encontrado!' })
@@ -41,7 +42,7 @@ const SaleTemplate: FC<IComponentProps> = ({ store }) => {
                     Encontre seus Pokemons para vender
                 </SimpleSearchForm>
             </Card>
-            <PokemonInfoActionCard pokemon={pokemon} store={store} action='Vender' apiAction={serverRequestAPI.saveWalletAssetInactive}>
+            <PokemonInfoActionCard pokemon={pokemon} store={store} set={set} action='Vender' apiAction={serverRequestAPI.saveWalletAssetInactive}>
                 Vender Pokemon encontrado abaixo:
             </PokemonInfoActionCard>
         </Container >

@@ -11,7 +11,7 @@ const getAssetsFormated = (pokemonAssets: Pokemon[], rate: number) => {
     const currentCostBasis = (asset: Pokemon) => asset.baseExperience * SATOSHI * rate
     let totalValuation = 0
 
-    const assets = pokemonAssets.map(asset => {
+    const assets = pokemonAssets.filter(asset => asset.active).map(asset => {
         totalValuation += currentCostBasis(asset) - asset.costBasis
 
         return {
@@ -44,24 +44,28 @@ const ValuationTemplate: FC<IComponentProps> = ({ assets }) => {
     return (
         <Container gap="md" direction='column' >
             {assetsFormated.current && <Card maxWidth={450}>
-                <h2>Acompanhe abaixo a valorização dos seus Pokemons comparado USD de hoje</h2>
+                <h2>Acompanhe abaixo a valorização dos seus Pokemons comparado ao USD de hoje</h2>
                 <h3>Total: USD ${assetsFormated.current.totalValuation}</h3>
-                {assetsFormated.current.assets.map(({ id, name, costBasis, costBasisToday, valuation }) => (
-                    <dl key={id?.toString()}>
-                        <dt>Pokemon {name}:</dt>
-                        <dd>
-                            <div>
-                                Compra: USD ${costBasis}
-                            </div>
-                            <div>
-                                Hoje: USD ${costBasisToday}
-                            </div>
-                            <div>
-                                Valorização: USD ${valuation}
-                            </div>
-                        </dd>
-                    </dl>
-                ))}
+                <Container gap='xs'>
+                    {assetsFormated.current.assets.map(({ id, name, costBasis, costBasisToday, valuation }) => (
+                        <Card solid key={id?.toString()}>
+                            <dl>
+                                <dt>Pokemon {name}:</dt>
+                                <dd>
+                                    <div>
+                                        Compra: USD ${costBasis}
+                                    </div>
+                                    <div>
+                                        Hoje: USD ${costBasisToday}
+                                    </div>
+                                    <div>
+                                        Valorização: USD ${valuation}
+                                    </div>
+                                </dd>
+                            </dl>
+                        </Card>
+                    ))}
+                </Container>
             </Card>}
         </Container>
     )
