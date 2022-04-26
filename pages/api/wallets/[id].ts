@@ -16,6 +16,7 @@ export default async function handler(
     res: NextApiResponse<ResponseData>
 ) {    
     if (req.method === 'GET') {
+        console.log('get ')
         const { id } = req.query
         
         if (!id || Array.isArray(id)) {
@@ -23,7 +24,7 @@ export default async function handler(
             res.send({ message: { status: 'error', description: 'Wallet Id inválido' }})
             res.end()
         }
-        
+        console.log('get2 ')
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.getUserWallet(id as string),
             callbackSuccess: (data: any) => {
@@ -46,13 +47,34 @@ export default async function handler(
             callbackSuccess: (data: any) => {
                 console.log('wallets-data: ', data)
                 res.status(200)
-                res.json({ message: { status: 'success', description: 'Wallet salva com sucesso!' }})
+                res.json({ message: { status: 'success', description: 'Wallet salva com sucesso!' } })
                 res.end
             },
             callbackError: (error: any) => {
                 console.log('wallets-error: ', error)
                 res.status(500)
                 res.send({ message: { status: 'error', description: 'Erro ao salvar wallet, tente novamente' }})
+                res.end
+            }        
+        })
+    } else if (req.method === 'PUT') {
+        console.log('PUT')
+        const { wallet, newAsset } = JSON.parse(req.body)
+        wallet._id = new ObjectId(wallet._id)
+        wallet.assets.push(newAsset)
+
+        promiseHandlerAPI({
+            action: async () =>  await pokemonWalletAPI.saveWallet(wallet),
+            callbackSuccess: (data: any) => {
+                console.log('asset-data: ', data)
+                res.status(200)
+                res.json({ message: { status: 'success', description: 'Asset salvo com sucesso!' } })
+                res.end
+            },
+            callbackError: (error: any) => {
+                console.log('asset-error: ', error)
+                res.status(500)
+                res.send({ message: { status: 'error', description: 'Erro ao salvar asset, tente novamente' }})
                 res.end
             }        
         })

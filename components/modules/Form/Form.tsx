@@ -20,9 +20,9 @@ const Form: FC<ComponentProps> = ({ onSubmit, loading = false, message, children
 
     return (
         <Loader loading={loading}>
-            <FormStyle onSubmit={handleSubmit} message={message?.state}>
+            <FormStyle onSubmit={handleSubmit} message={message?.status}>
                 {children}
-                {message && <div className={`state${message?.state}`}>{message?.description}</div>}
+                {message && <div className={`status${message?.status}`}>{message?.description}</div>}
             </FormStyle>
         </Loader>
     )
@@ -30,7 +30,7 @@ const Form: FC<ComponentProps> = ({ onSubmit, loading = false, message, children
 
 const FormStyle = styled.form<{ message: string | undefined }>` 
     ${props => props.message && css`
-        .state${props.message} {
+        .status${props.message} {
             color: ${props.theme.colors[props.message as keyof IState]}
         }
     `};

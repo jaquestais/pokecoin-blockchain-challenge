@@ -9,23 +9,23 @@ const Menu: FC = () => {
         <MenuStyle>
             <Container as='ul' gap='sm'>
                 <li>
-                    <Link href={'/wallet/acquisition'}>
+                    <Link href='/wallet' as='/wallet/acquisition' shallow>
                         <a>Adquirir</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href={'/wallet/remove'}>
+                    <Link href='/wallet' as='/wallet/history' shallow>
+                        <a>Histórico</a>
+                    </Link>
+                </li>
+                <li>
+                    <Link href='/wallet' as='/wallet/sale' shallow>
                         <a>Vender</a>
                     </Link>
                 </li>
                 <li>
-                    <Link href={'/wallet/valuation'}>
+                    <Link href='/wallet' as='/wallet/valuation' shallow>
                         <a>Valorização</a>
-                    </Link>
-                </li>
-                <li>
-                    <Link href={'/wallet/history'}>
-                        <a>Histórico</a>
                     </Link>
                 </li>
             </Container>

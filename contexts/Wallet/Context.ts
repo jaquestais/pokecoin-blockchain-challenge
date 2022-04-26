@@ -1,15 +1,18 @@
 import Wallet from '@domain/Wallet'
-import { createContext, Dispatch, } from 'react'
-import { IActions } from './Actions'
+import { createContext } from 'react'
 
 interface IContext {
     state: Wallet,
-    dispatch: Dispatch<IActions>,
+    fillWallet: Function,
+    addAsset: Function,
+    saleAsset: Function,
 }
 
 const defaultContextValue: IContext = {
     state: new Wallet([]),
-    dispatch: () => { },
+    fillWallet: () => { },
+    addAsset: () => { },
+    saleAsset: () => { },
 }
 
 const WalletContext = createContext<IContext>(defaultContextValue)

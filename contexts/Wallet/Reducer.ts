@@ -1,7 +1,7 @@
 import Wallet from "@domain/Wallet"
 import Actions, { IActions } from "./Actions"
 
-const reducer = (state: Wallet, { type, wallet, asset }: IActions ): Wallet => {
+const walletReducer = (state: Wallet, { type, wallet, asset }: IActions ) => {
     switch (type) {
         case Actions.FILL_WALLET:
             if (!wallet)  return state
@@ -36,4 +36,4 @@ const reducer = (state: Wallet, { type, wallet, asset }: IActions ): Wallet => {
 }
 
 
-export default reducer
+export default walletReducer

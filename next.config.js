@@ -8,6 +8,30 @@ const nextConfig = {
   images: {
     domains: ['pokeapi.co', 'raw.githubusercontent.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/wallet/acquisition',
+        destination: '/wallet',
+        permanent: true,
+      },
+      {
+        source: '/wallet/history',
+        destination: '/wallet',
+        permanent: true,
+      },
+      {
+        source: '/wallet/sale',
+        destination: '/wallet',
+        permanent: true,
+      },
+      {
+        source: '/wallet/valuation',
+        destination: '/wallet',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

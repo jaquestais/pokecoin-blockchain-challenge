@@ -10,11 +10,11 @@ const useApi = (inputInit?: RequestInfo | URL): [{ response: any, loading: boole
 
     useEffect(() => {
         if (!input) return
-
+        
         setLoading(true)
         setResponse(null)
         setError(null)
-
+        
         input && fetchApi({
             input,
             callbackSuccess: (response: any) => {
@@ -28,7 +28,7 @@ const useApi = (inputInit?: RequestInfo | URL): [{ response: any, loading: boole
                 setLoading(false)
             }
         })
-    }, [input])
+    }, [input, setInput, inputInit])
 
     return [{ response, loading, error }, setInput]
 }

@@ -1,4 +1,4 @@
-import Wallet from "@domain/Wallet"
+import Wallet, { Asset } from "@domain/Wallet"
 
 const requestInit: RequestInit = {}
 
@@ -15,7 +15,16 @@ const saveWallet = (wallet: Wallet) => {
     return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)
 }
 
+const saveWalletAsset = (wallet: Wallet, newAsset: Asset) => {
+    const requestInit: RequestInit = {
+        method: 'put',
+        body: JSON.stringify({ wallet, newAsset }),
+    }
 
-const serverRequestAPI = { getPokemon, getUserWallet, saveWallet }
+    return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)
+}
+
+
+const serverRequestAPI = { getPokemon, getUserWallet, saveWallet, saveWalletAsset }
 
 export default serverRequestAPI

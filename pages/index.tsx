@@ -8,12 +8,12 @@ import { FC, useContext, useEffect } from 'react'
 
 const Home: FC = () => {
     const [{ response }, setApi] = useApi()
-    const { state: wallet, dispatch } = useContext(WalletContext)
+    const { state: wallet, fillWallet } = useContext(WalletContext)
 
     useEffect(() => {
         if (!wallet?._id && response?.data) {
 
-            dispatch({ type: Actions.FILL_WALLET, wallet: response.data })
+            fillWallet(response.data)
         } else if (!wallet._id) {
 
             setApi(serverRequestAPI.getUserWallet())
