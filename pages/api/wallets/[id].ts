@@ -1,5 +1,6 @@
 import pokemonWalletAPI from '@api/pokemonAPI/pokemonWalletAPI'
 import promiseHandlerAPI from '@api/promiseHandlerAPI'
+import { Pokemon, PokemonWallet } from '@domain/Pokemon'
 import Wallet from '@domain/Wallet'
 import IMessage from '@type/Message'
 import { ObjectId } from 'mongodb'
@@ -55,7 +56,8 @@ export default async function handler(
             }        
         })
     } else if (req.method === 'PUT') {
-        const { wallet, newAsset, asset } = JSON.parse(req.body)
+        const { wallet, newAsset, asset }: { wallet: PokemonWallet, newAsset: Pokemon, asset: Pokemon} = JSON.parse(req.body)
+        console.log('oi', wallet, newAsset, asset)
         wallet._id = new ObjectId(wallet._id)
         
         if (newAsset) {
@@ -68,7 +70,7 @@ export default async function handler(
                 modifiedAssets[index].inactiveDatetime = new Date().getTime()
             }
 
-            wallet.asset = modifiedAssets
+            wallet.assets = modifiedAssets
         }
 
 

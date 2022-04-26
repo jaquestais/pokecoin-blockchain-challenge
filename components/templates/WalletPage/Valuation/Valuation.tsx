@@ -35,7 +35,7 @@ const ValuationTemplate: FC<IComponentProps> = ({ assets }) => {
     const [{ response }] = useApi(coinAPI.getRequestInfo())
 
     useEffect(() => {
-        const { rate } = response?.data
+        const rate = response?.data?.rate
         if (rate) assetsFormated.current = getAssetsFormated(assets, rate)
 
     }, [response])

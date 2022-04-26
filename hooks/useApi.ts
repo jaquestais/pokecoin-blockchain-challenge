@@ -9,14 +9,14 @@ const useApi = (inputInit?: RequestInfo): [{ response: any, loading: boolean, er
     const [error, setError] = useState<any>(null)
     
     useEffect(() => {
-        if (!input) return
+        if (!input && !inputInit) return
         
         setLoading(true)
         setResponse(null)
         setError(null)
         
-        input && fetchApi({
-            input,
+        input || inputInit && fetchApi({
+            input: input || inputInit,
             callbackSuccess: (response: any) => {
                 setResponse(response)                
                 setLoading(false)

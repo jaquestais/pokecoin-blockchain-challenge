@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 
 interface Asset {
     _id?: ObjectId,
+    name?: string,
     active?: boolean,
     costBasis: number,
 }

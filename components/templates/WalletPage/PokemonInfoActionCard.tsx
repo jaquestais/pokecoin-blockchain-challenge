@@ -18,7 +18,7 @@ const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, action, ap
     const [{ loading, response, error }, setApi] = useApi()
 
     const handleSubmit = () => {
-        setApi(apiAction(store, pokemon!))
+        setApi(apiAction(store.current, pokemon!))
     }
 
     useEffect(() => {

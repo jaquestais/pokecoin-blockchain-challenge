@@ -18,7 +18,7 @@ export default async function handler(
 ) {    
 
     const getMappedPokemon = (data: any, coinData: any): Pokemon => {
-
+        console.log('coin', coinData)
         return {
             name: data?.name,
             image: data?.sprites?.front_default,

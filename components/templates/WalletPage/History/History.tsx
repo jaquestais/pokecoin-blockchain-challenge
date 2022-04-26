@@ -35,7 +35,8 @@ const HistoryTemplate: FC<IComponentProps> = ({ assets }) => {
     const [{ response }] = useApi(coinAPI.getRequestInfo())
 
     useEffect(() => {
-        const { rate } = response?.data
+        debugger
+        const rate = response?.data?.rate
         if (rate) assetsFormated.current = getAssetsFormated(assets, rate)
 
     }, [response])
