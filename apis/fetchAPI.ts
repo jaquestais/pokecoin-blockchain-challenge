@@ -6,13 +6,14 @@ const fetchAPI = ({ input, callbackSuccess, callbackError }: IFetch) => {
     promiseHandlerAPI({ 
         action: async () => {
             if (Array.isArray(input)) {
-                return await Promise.all(input.map(value => fetch(value)))
+                return await Promise.all(input.map((value: RequestInfo) => fetch(value)))
             } else {
                 return await fetch(input)
             }
         },
         callbackSuccess: async (response: any) => {
             if (!callbackSuccess) return
+
             if (Array.isArray(response)) {
                 const textType = response.find(value => value.headers.get('content-type')?.indexOf('application/json') === -1)
                 if (textType) return callbackError && callbackError(await textType.text())

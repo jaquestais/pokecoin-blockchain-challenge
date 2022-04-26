@@ -11,7 +11,6 @@ const WalletProvider: FC<IProviderProps> = ({ initialWallet = new PokemonWallet(
     const [state, setState] = useState(initialWallet)
     const store = useRef(initialWallet)
 
-
     useEffect(() => {
         store.current = state
     }, [state])

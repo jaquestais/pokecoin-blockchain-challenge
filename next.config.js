@@ -11,6 +11,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/',
+        destination: '/wallet',
+        permanent: true,
+      },
+      {
         source: '/wallet/acquisition',
         destination: '/wallet',
         permanent: true,

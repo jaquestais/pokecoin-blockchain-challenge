@@ -16,7 +16,6 @@ export default async function handler(
     res: NextApiResponse<ResponseData>
 ) {    
     if (req.method === 'GET') {
-        console.log('get ')
         const { id } = req.query
         
         if (!id || Array.isArray(id)) {
@@ -24,7 +23,7 @@ export default async function handler(
             res.send({ message: { status: 'error', description: 'Wallet Id inválido' }})
             res.end()
         }
-        console.log('get2 ')
+        
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.getUserWallet(id as string),
             callbackSuccess: (data: any) => {
@@ -44,16 +43,14 @@ export default async function handler(
 
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.saveWallet(wallet),
-            callbackSuccess: (data: any) => {
-                console.log('wallets-data: ', data)
+            callbackSuccess: () => {
                 res.status(200)
                 res.json({ message: { status: 'success', description: 'Wallet salva com sucesso!' }, data: wallet })
                 res.end
             },
             callbackError: (error: any) => {
-                console.log('wallets-error: ', error)
                 res.status(500)
-                res.send({ message: { status: 'error', description: 'Erro ao salvar wallet, tente novamente' }})
+                res.send({ message: { status: 'error', description: 'Erro ao salvar wallet, tente novamente' }, error })
                 res.end
             }        
         })
@@ -77,20 +74,19 @@ export default async function handler(
 
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.saveWallet(wallet),
-            callbackSuccess: (data: any) => {
-                console.log('asset-data: ', data)
+            callbackSuccess: () => {
                 res.status(200)
                 res.json({ message: { status: 'success', description: `Asset ${newAsset ? 'salvo' : 'vendido'} com sucesso!` }, data: wallet })
                 res.end
             },
             callbackError: (error: any) => {
-                console.log('asset-error: ', error)
                 res.status(500)
-                res.send({ message: { status: 'error', description: `Erro ao ${newAsset ? 'salvar' : 'vender'} asset, tente novamente` }})
+                res.send({ message: { status: 'error', description: `Erro ao ${newAsset ? 'salvar' : 'vender'} asset, tente novamente` }, error })
                 res.end
             }        
         })
     } else {
+        res.status(404)
         res.end()
     }
 }

@@ -5,7 +5,7 @@ const getRequestInfo = () => {
     const assetIdBase = 'BTC'
     const assetIdQuote = 'USD'
 
-    return `${API_URL_COINAPI}/v1/exchangerate/${assetIdBase}/${assetIdQuote}?apikey=${API_KEY_COINAPI}`
+    return new Request(`${API_URL_COINAPI}/v1/exchangerate/${assetIdBase}/${assetIdQuote}?apikey=${API_KEY_COINAPI}`)
 }
 
 const coinAPI = { getRequestInfo }

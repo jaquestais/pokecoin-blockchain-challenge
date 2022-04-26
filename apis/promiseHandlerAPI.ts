@@ -5,7 +5,6 @@ const promiseHandlerAPI = async ({ action, callbackSuccess, callbackError }: IPr
         const response = await action()
         callbackSuccess && callbackSuccess(response)
     } catch (error) {
-        console.log('promiseHandler error: ', error)
         callbackError && callbackError(error)
     }
 }
