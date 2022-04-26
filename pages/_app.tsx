@@ -1,5 +1,4 @@
 import WalletProvider from '@context/Wallet/Provider'
-import Wallet from '@domain/Wallet'
 import customTheme from '@style/customTheme'
 import GlobalStyle from '@style/GlobalStyle'
 import { FC } from 'react'
@@ -15,7 +14,7 @@ const App: FC<IProps> = ({ Component, pageProps }) => {
     return (
         <ThemeProvider theme={customTheme}>
             <GlobalStyle />
-            <WalletProvider initialWallet={new Wallet([])} >
+            <WalletProvider>
                 <Component {...pageProps} />
             </WalletProvider>
         </ThemeProvider>

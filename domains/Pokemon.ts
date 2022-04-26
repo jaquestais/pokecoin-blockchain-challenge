@@ -8,6 +8,7 @@ class Pokemon implements Asset {
         public baseExperience: number, 
         public registerDatetime: number, 
         public costBasis: number,
+        public inactiveDatetime?: number, 
         public active: boolean = true, 
         public _id?: ObjectId) { }
 }

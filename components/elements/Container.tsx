@@ -28,7 +28,9 @@ const ContainerStyle = styled.div<ComponentProps>`
     flex-direction: ${props => props.direction};
     align-items: center;
     justify-content: center;
-    text-align: center;
+    h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+    }
 `
 
 export default Container

@@ -1,5 +1,5 @@
-import { IFetch } from "@type/API"
-import promiseHandlerAPI from "./promiseHandlerAPI"
+import { IFetch } from '@type/API'
+import promiseHandlerAPI from './promiseHandlerAPI'
 
 const fetchAPI = ({ input, callbackSuccess, callbackError }: IFetch) => {
     
@@ -12,18 +12,17 @@ const fetchAPI = ({ input, callbackSuccess, callbackError }: IFetch) => {
             }
         },
         callbackSuccess: async (response: any) => {
-        if (callbackSuccess) {
-            let data
-
+            if (!callbackSuccess) return
             if (Array.isArray(response)) {
-                data = await Promise.all(response.map(value => value.json()))
+                const textType = response.find(value => value.headers.get('content-type')?.indexOf('application/json') === -1)
+                if (textType) return callbackError && callbackError(await textType.text())
+                else return callbackSuccess(await Promise.all(response.map(value => value.json())))
             } else {
-                data = await response.json()
+                if (response.headers.get('content-type')?.indexOf('application/json') !== -1) return callbackSuccess(await response.json())
+                else return callbackError && callbackError(await response.text())
             }
-            
-            callbackSuccess(data)
-        }
-    }, callbackError })
+        }, callbackError
+    })
 }
 
 export default fetchAPI

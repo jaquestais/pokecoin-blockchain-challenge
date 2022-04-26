@@ -1,5 +1,4 @@
 import serverRequestAPI from '@api/serverRequestAPI'
-import Actions from '@context/Wallet/Actions'
 import WalletContext from '@context/Wallet/Context'
 import useApi from '@hook/useApi'
 import Default from '@layout/Default/Default'
@@ -8,12 +7,12 @@ import { FC, useContext, useEffect } from 'react'
 
 const Home: FC = () => {
     const [{ response }, setApi] = useApi()
-    const { state: wallet, fillWallet } = useContext(WalletContext)
+    const { state: wallet, setState } = useContext(WalletContext)
 
     useEffect(() => {
         if (!wallet?._id && response?.data) {
 
-            fillWallet(response.data)
+            setState(response.data)
         } else if (!wallet._id) {
 
             setApi(serverRequestAPI.getUserWallet())
@@ -23,7 +22,7 @@ const Home: FC = () => {
 
     return (
         <Default>
-            {wallet._id && <HomePage />}
+            {wallet?._id && <HomePage />}
         </Default>
     )
 }

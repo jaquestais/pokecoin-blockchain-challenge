@@ -24,7 +24,16 @@ const saveWalletAsset = (wallet: Wallet, newAsset: Asset) => {
     return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)
 }
 
+const saveWalletAssetInactive = (wallet: Wallet, asset: Asset) => {
+    const requestInit: RequestInit = {
+        method: 'put',
+        body: JSON.stringify({ wallet, asset }),
+    }
 
-const serverRequestAPI = { getPokemon, getUserWallet, saveWallet, saveWalletAsset }
+    return new Request(`${process.env.NEXT_PUBLIC_HOST_URL}/api/wallets/${wallet._id}`, requestInit)
+}
+
+
+const serverRequestAPI = { getPokemon, getUserWallet, saveWallet, saveWalletAsset, saveWalletAssetInactive }
 
 export default serverRequestAPI

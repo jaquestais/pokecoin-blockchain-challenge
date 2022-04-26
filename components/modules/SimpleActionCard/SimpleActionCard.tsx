@@ -9,7 +9,7 @@ import IMessage from '@type/Message'
 interface IComponentProps {
     loading?: boolean,
     onSubmit: Function,
-    title: string,
+    title: ReactNode,
     image?: string,
     alt?: string,
     action: string,
@@ -17,19 +17,16 @@ interface IComponentProps {
     children: ReactNode,
 }
 
-const SimpleActionCard: FC<IComponentProps> = ({ loading, onSubmit, title, image, alt, action, message, children }) => {
-
-    return (
-        <SimpleActionCardStyle>
-            <Form loading={loading} message={message} onSubmit={onSubmit}>
-                <h2>{title}</h2>
-                {image && <Image src={image} alt={alt} objectFit="cover" objectPosition="center" height={120} width={120} />}
-                {children}
-                <Button type="submit" light>{action}</Button>
-            </Form>
-        </SimpleActionCardStyle>
-    )
-}
+const SimpleActionCard: FC<IComponentProps> = ({ loading, onSubmit, title, image, alt, action, message, children }) => (
+    <SimpleActionCardStyle>
+        <Form loading={loading} message={message} onSubmit={onSubmit}>
+            <h2>{title}</h2>
+            {image && <Image src={image} alt={alt} objectFit="cover" objectPosition="center" height={120} width={120} />}
+            {!message && <div>{children}</div>}
+            {!message && <Button type="submit" light>{action}</Button>}
+        </Form>
+    </SimpleActionCardStyle>
+)
 
 const SimpleActionCardStyle = styled.section`
     dl {

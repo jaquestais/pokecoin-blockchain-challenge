@@ -1,29 +1,27 @@
-import Wallet, { Asset } from "@domain/Wallet";
-import useReducerWithCallback from "@hook/useReducerWithCallback";
-import { FC, ReactNode } from "react";
-import Actions from "./Actions";
+import { PokemonWallet } from "@domain/Pokemon";
+import { FC, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
 import WalletContext from "./Context";
-import walletReducer from "./Reducer";
-
-const init = (initial: Wallet) => initial
 
 interface IProviderProps {
-    initialWallet: Wallet,
+    initialWallet?: PokemonWallet,
     children: ReactNode,
 }
 
-const WalletProvider: FC<IProviderProps> = ({ initialWallet, children }) => {
-    const [state, dispatch] = useReducerWithCallback(walletReducer, initialWallet, init)
+const WalletProvider: FC<IProviderProps> = ({ initialWallet = new PokemonWallet([]), children }) => {
+    const [state, setState] = useState(initialWallet)
+    const store = useRef(initialWallet)
 
-    const fillWallet = (wallet: Wallet, callback?: Function) => dispatch({ type: Actions.FILL_WALLET, wallet }, callback)
-    const addAsset = (asset: Asset, callback?: Function) => dispatch({ type: Actions.ADD_ASSET, asset }, callback)
-    const saleAsset = (asset: Asset, callback?: Function) => dispatch({ type: Actions.SALE_ASSET, asset }, callback)
+
+    useEffect(() => {
+        store.current = state
+    }, [state])
 
     const contextValue = {
         state,
-        fillWallet,
-        addAsset,
-        saleAsset,
+        setState: (params: SetStateAction<PokemonWallet>) => {
+            setState(params)
+        },
+        store: store,
     }
 
     return (

@@ -7,7 +7,7 @@ const useApi = (inputInit?: RequestInfo | URL): [{ response: any, loading: boole
     const [loading, setLoading] = useState<boolean>(false)
     const [response, setResponse] = useState<{ data: any, message: Message } | null>(null)
     const [error, setError] = useState<any>(null)
-
+    
     useEffect(() => {
         if (!input) return
         
@@ -19,16 +19,17 @@ const useApi = (inputInit?: RequestInfo | URL): [{ response: any, loading: boole
             input,
             callbackSuccess: (response: any) => {
                 console.log('useAPI Data: ', response)
-                setResponse(response)
+                setResponse(response)                
                 setLoading(false)
             }, callbackError: (response: any) => {
                 console.log('useAPI Data: ', response)
-
+                
                 setError(response?.message ? response?.message : response)
                 setLoading(false)
             }
         })
-    }, [input, setInput, inputInit])
+
+    }, [input])
 
     return [{ response, loading, error }, setInput]
 }

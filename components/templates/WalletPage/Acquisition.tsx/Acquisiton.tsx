@@ -1,16 +1,19 @@
-import { FC, useContext } from 'react'
+import { FC, MutableRefObject } from 'react'
 import { } from '@type/CustomTheme'
 import Container from '@element/Container'
 import useApi from '@hook/useApi'
 import serverRequestAPI from '@api/serverRequestAPI'
 import Card from '@element/Card'
 import SimpleSearchForm from '@module/SimpleSearchForm/SimpleSearchForm'
-import WalletContext from '@context/Wallet/Context'
-import PokemonInfoActionCard from './PokemonInfoActionCard'
+import PokemonInfoActionCard from '../PokemonInfoActionCard'
+import Wallet from '@domain/Wallet'
 
-const AcquisitionTemplate: FC = () => {
+interface IComponentProps {
+    store: MutableRefObject<Wallet>,
+}
+
+const AcquisitionTemplate: FC<IComponentProps> = ({ store }) => {
     const [{ loading, response, error }, setApi] = useApi()
-    const { state: wallet, addAsset } = useContext(WalletContext)
 
     return (
         <Container gap="md" direction='column' >
@@ -27,8 +30,10 @@ const AcquisitionTemplate: FC = () => {
                     Encontre Pokemons
                 </SimpleSearchForm>
             </Card>
-            <PokemonInfoActionCard wallet={wallet} pokemon={response?.data} callbackState={addAsset}></PokemonInfoActionCard>
-        </Container>
+            <PokemonInfoActionCard pokemon={response?.data} store={store} action='Adquirir' apiAction={serverRequestAPI.saveWalletAsset}>
+                Adquira o Pokemon encontrado abaixo:
+            </PokemonInfoActionCard>
+        </Container >
     )
 }
 

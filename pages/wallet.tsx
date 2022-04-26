@@ -11,19 +11,24 @@ import { FC, useContext, useEffect } from 'react'
 
 const Wallet: FC = () => {
     const [{ response }, setApi] = useApi()
-    const { state: wallet, fillWallet } = useContext(WalletContext)
+    const { state, setState, store } = useContext(WalletContext)
     const router = useRouter()
 
     useEffect(() => {
-        if (!wallet?._id && response?.data) {
-
-            fillWallet(response.data)
-        } else if (!wallet._id) {
-
+        if (!state?._id && response?.data) {
+            setState(response.data)
+        } else if (!state._id) {
             setApi(serverRequestAPI.getUserWallet())
         }
 
     }, [response])
+
+    useEffect(() => {
+        if (state?._id && store.current) {
+            setState(store.current)
+        }
+
+    }, [router.asPath])
 
     useEffect(() => {
         router.push('/wallet', '/wallet/acquisition', { shallow: true })
@@ -31,30 +36,26 @@ const Wallet: FC = () => {
 
     const RenderTemplate = () => {
         switch (router.asPath) {
-            case '/wallet/acquisition':
-
-                return <AcquisitionTemplate />
-
             case '/wallet/history':
 
-                return <HistoryTemplate wallet={wallet} />
+                return <HistoryTemplate assets={state.assets} />
 
             case '/wallet/sale':
 
-                return <SaleTemplate />
+                return <SaleTemplate store={store} />
 
             case '/wallet/valuation':
 
-                return <ValuationTemplate wallet={wallet} />
+                return <ValuationTemplate assets={state.assets} />
 
             default:
-                return <AcquisitionTemplate />
+                return <AcquisitionTemplate store={store} />
         }
     }
 
     return (
         <Default>
-            {wallet._id && <RenderTemplate />}
+            {state?._id && <RenderTemplate />}
         </Default>
     )
 }

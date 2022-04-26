@@ -24,6 +24,7 @@ export default async function handler(
             image: data?.sprites?.front_default,
             baseExperience: data?.base_experience,
             registerDatetime: new Date().getTime(),
+            inactiveDatetime: undefined,
             costBasis: coinData?.rate * data?.base_experience * SATOSHI,
             active: true,
         }
@@ -34,7 +35,7 @@ export default async function handler(
         
         if (!id || Array.isArray(id)) {
             res.status(400)
-            res.send({ message: { status: 'error', description: 'Pokemon nome ou Id inválido' }})
+            res.send({ message: { status: 'error', description: 'Nome ou Id de Pokemon inválido' }})
             res.end()
         }
         
@@ -45,9 +46,9 @@ export default async function handler(
                 res.json({ message: { status: 'success', description: 'Pokemon encontrado com sucesso!' }, data: getMappedPokemon(pokemonResponse, coinResponse) })
                 res.end()
             },
-            callbackError: (error: any) => {
+            callbackError: async (response: any) => {
                 res.status(500)
-                res.send({ message: { status: 'error', description: 'Erro ao procurar pokemon, tente novamente' }, error })  
+                res.send({ message: { status: 'error', description: 'Pokemon não encontrado, tente outro nome ou Id' }, error: response })  
                 res.end()
             }
         })

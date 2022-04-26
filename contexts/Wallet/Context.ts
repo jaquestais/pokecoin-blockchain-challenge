@@ -1,18 +1,16 @@
-import Wallet from '@domain/Wallet'
-import { createContext } from 'react'
+import { PokemonWallet } from '@domain/Pokemon'
+import { createContext, MutableRefObject } from 'react'
 
 interface IContext {
-    state: Wallet,
-    fillWallet: Function,
-    addAsset: Function,
-    saleAsset: Function,
+    state: PokemonWallet,
+    setState: Function,
+    store: MutableRefObject<PokemonWallet>,
 }
 
 const defaultContextValue: IContext = {
-    state: new Wallet([]),
-    fillWallet: () => { },
-    addAsset: () => { },
-    saleAsset: () => { },
+    state: new PokemonWallet([]),
+    setState: () => { },
+    store: { current:  new PokemonWallet([])},
 }
 
 const WalletContext = createContext<IContext>(defaultContextValue)

@@ -47,7 +47,7 @@ export default async function handler(
             callbackSuccess: (data: any) => {
                 console.log('wallets-data: ', data)
                 res.status(200)
-                res.json({ message: { status: 'success', description: 'Wallet salva com sucesso!' } })
+                res.json({ message: { status: 'success', description: 'Wallet salva com sucesso!' }, data: wallet })
                 res.end
             },
             callbackError: (error: any) => {
@@ -58,23 +58,35 @@ export default async function handler(
             }        
         })
     } else if (req.method === 'PUT') {
-        console.log('PUT')
-        const { wallet, newAsset } = JSON.parse(req.body)
+        const { wallet, newAsset, asset } = JSON.parse(req.body)
         wallet._id = new ObjectId(wallet._id)
-        wallet.assets.push(newAsset)
+        
+        if (newAsset) {
+            wallet.assets.push(newAsset)
+        } else if (asset) {
+            const modifiedAssets = wallet.assets
+            const index = modifiedAssets.indexOf(asset)
+            if (index >= 0) {
+                modifiedAssets[index].active = false
+                modifiedAssets[index].inactiveDatetime = new Date().getTime()
+            }
+
+            wallet.asset = modifiedAssets
+        }
+
 
         promiseHandlerAPI({
             action: async () =>  await pokemonWalletAPI.saveWallet(wallet),
             callbackSuccess: (data: any) => {
                 console.log('asset-data: ', data)
                 res.status(200)
-                res.json({ message: { status: 'success', description: 'Asset salvo com sucesso!' } })
+                res.json({ message: { status: 'success', description: `Asset ${newAsset ? 'salvo' : 'vendido'} com sucesso!` }, data: wallet })
                 res.end
             },
             callbackError: (error: any) => {
                 console.log('asset-error: ', error)
                 res.status(500)
-                res.send({ message: { status: 'error', description: 'Erro ao salvar asset, tente novamente' }})
+                res.send({ message: { status: 'error', description: `Erro ao ${newAsset ? 'salvar' : 'vender'} asset, tente novamente` }})
                 res.end
             }        
         })
