@@ -9,12 +9,13 @@ import Card from '@element/Card'
 interface IComponentProps {
     pokemon?: Pokemon,
     store: MutableRefObject<Wallet>,
+    set: Function,
     action: string,
     apiAction: Function,
     children: ReactNode,
 }
 
-const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, action, apiAction, children }) => {
+const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, set, action, apiAction, children }) => {
     const [{ loading, response, error }, setApi] = useApi()
 
     const handleSubmit = () => {
@@ -22,8 +23,8 @@ const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, action, ap
     }
 
     useEffect(() => {
-        if (response?.data?.assets > 0) {
-            store.current = response.data
+        if (response?.data?.assets.length > 0) {
+            set(response.data)
         }
 
     }, [response])

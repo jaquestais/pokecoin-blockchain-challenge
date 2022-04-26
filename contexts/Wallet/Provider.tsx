@@ -1,5 +1,5 @@
 import { PokemonWallet } from "@domain/Pokemon";
-import { FC, ReactNode, SetStateAction, useEffect, useRef, useState } from "react";
+import { FC, ReactNode, useRef, useState } from "react";
 import WalletContext from "./Context";
 
 interface IProviderProps {
@@ -11,16 +11,19 @@ const WalletProvider: FC<IProviderProps> = ({ initialWallet = new PokemonWallet(
     const [state, setState] = useState(initialWallet)
     const store = useRef(initialWallet)
 
-    useEffect(() => {
-        store.current = state
-    }, [state])
-
     const contextValue = {
         state,
-        setState: (params: SetStateAction<PokemonWallet>) => {
-            setState(params)
+        setState: (wallet: PokemonWallet) => {
+            store.current = wallet
+            setState(wallet)
+        },
+        updateState: () => {
+            setState(store.current)
         },
         store: store,
+        setStore: (wallet: PokemonWallet) => {
+            store.current = wallet
+        },
     }
 
     return (

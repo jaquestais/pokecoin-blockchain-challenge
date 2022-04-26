@@ -10,9 +10,10 @@ import Wallet from '@domain/Wallet'
 
 interface IComponentProps {
     store: MutableRefObject<Wallet>,
+    set: Function,
 }
 
-const AcquisitionTemplate: FC<IComponentProps> = ({ store }) => {
+const AcquisitionTemplate: FC<IComponentProps> = ({ store, set }) => {
     const [{ loading, response, error }, setApi] = useApi()
 
     return (
@@ -30,7 +31,7 @@ const AcquisitionTemplate: FC<IComponentProps> = ({ store }) => {
                     Encontre Pokemons
                 </SimpleSearchForm>
             </Card>
-            <PokemonInfoActionCard pokemon={response?.data} store={store} action='Adquirir' apiAction={serverRequestAPI.saveWalletAsset}>
+            <PokemonInfoActionCard pokemon={response?.data} store={store} set={set} action='Adquirir' apiAction={serverRequestAPI.saveWalletAsset}>
                 Adquira o Pokemon encontrado abaixo:
             </PokemonInfoActionCard>
         </Container >

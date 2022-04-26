@@ -4,6 +4,7 @@ import pokemonAPI from '@api/pokemonAPI/pokemonAPI'
 import { SATOSHI } from '@constant/bitcoinStandard'
 import { Pokemon } from '@domain/Pokemon'
 import IMessage from '@type/Message'
+import { ObjectId } from 'mongodb'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type ResponseData = {
@@ -20,6 +21,7 @@ export default async function handler(
     const getMappedPokemon = (data: any, coinData: any): Pokemon => {
         console.log('coin', coinData)
         return {
+            _id: new ObjectId(),
             name: data?.name,
             image: data?.sprites?.front_default,
             baseExperience: data?.base_experience,
