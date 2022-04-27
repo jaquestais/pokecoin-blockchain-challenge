@@ -47,7 +47,13 @@ export default async function handler(
             },
             callbackError: async (response: any) => {
                 res.status(404)
-                res.send({ message: { status: 'error', description: 'Pokemon não encontrado, tente outro nome ou Id' }, error: response })  
+
+                if (response[1].error) {
+                    res.send({ message: { status: 'error', description: 'Erro ao buscar cotação de criptomoeda, tente novamente amanhã ou avise a Dev' }, error: response })  
+                } else {
+                    res.send({ message: { status: 'error', description: 'Pokemon não encontrado, tente outro nome ou Id' }, error: response })  
+                }
+
                 res.end()
             }
         })
