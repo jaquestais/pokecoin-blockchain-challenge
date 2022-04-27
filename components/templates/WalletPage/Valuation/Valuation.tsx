@@ -45,7 +45,7 @@ const ValuationTemplate: FC<IComponentProps> = ({ assets }) => {
 
     return (
         <Container gap="md" direction='column' >
-            {assetsFormated.current && <Card maxWidth={800}>
+            {assetsFormated.current && <Card maxWidth={1000}>
                 <h2>Acompanhe abaixo a valorização dos seus Pokemons comparado ao USD de hoje</h2>
                 <h3>Total: USD ${assetsFormated.current.totalValuation}</h3>
                 <Container gap='xs'>

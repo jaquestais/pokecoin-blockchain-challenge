@@ -14,6 +14,7 @@ const SimpleDetailsCard: FC<IComponentProps> = ({ alt, src, full = false, childr
         <Image
             src={src}
             alt={alt}
+            layout='fixed'
             objectFit='cover'
             objectPosition="center"
             height={80}
@@ -25,7 +26,7 @@ const SimpleDetailsCard: FC<IComponentProps> = ({ alt, src, full = false, childr
 
 const SimpleDetailsCardStyle = styled.div`
 ${(props: { theme: DefaultTheme, full: boolean }) => css`
-    flex-grow: 0;
+    flex-grow: 1;
     flex-basis: ${props.full ? '100%' : '45%'};
     text-decoration: none;
     display: flex;
@@ -34,7 +35,7 @@ ${(props: { theme: DefaultTheme, full: boolean }) => css`
     padding: 10px 20px;
     border: 1px solid ${props.theme.colors.secondary};
     border-radius: 10px;
-    color: ${props.theme.colors.secondary};
+    color: ${props.theme.colors.dark};
     transition-property: color border;
     transition-duration: 0.3s;
 
@@ -43,6 +44,10 @@ ${(props: { theme: DefaultTheme, full: boolean }) => css`
         color: ${props.theme.colors.dark};
         border: 1px solid ${props.theme.colors.dark};
         transform: scale(1.01);
+    }
+
+    dt {
+        font-weight: ${props.theme.typography.weights.bold};
     }
 `}`
 

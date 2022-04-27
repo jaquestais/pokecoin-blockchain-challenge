@@ -10,20 +10,23 @@ import SimpleDetailsCard from '@element/SimpleDetailsCard'
 
 const getAssetsFormated = (pokemonAssets: Pokemon[], rate: number): { assets: any[] } => {
     const currentCostBasis = (asset: Pokemon) => asset.baseExperience * SATOSHI * rate
-
-    const assets = pokemonAssets.map(asset => {
-
-        return {
-            id: asset._id,
-            name: asset.name,
-            image: asset.image,
-            registerDate: new Date(asset.registerDatetime).toLocaleDateString('pt-BR'),
-            inactiveDate: asset.inactiveDatetime && new Date(asset.inactiveDatetime).toLocaleDateString('pt-BR'),
-            valor: currentCostBasis(asset),
-        }
+    const getAssetFormatted = (asset: Pokemon, acquisitionRecord: boolean) => ({
+        id: `${asset._id}${acquisitionRecord}`,
+        name: asset.name,
+        image: asset.image,
+        acquisitionRecord,
+        date: acquisitionRecord ? asset.registerDatetime : asset.inactiveDatetime!,
+        valor: currentCostBasis(asset),
     })
 
-    return { assets }
+    const assets: any[] = []
+
+    pokemonAssets.forEach(asset => {
+        assets.push(getAssetFormatted(asset, true))
+        if (!asset.active) assets.push(getAssetFormatted(asset, false))
+    })
+
+    return { assets: assets.sort((a, b) => b.date - a.date) }
 }
 
 interface IComponentProps {
@@ -47,16 +50,18 @@ const HistoryTemplate: FC<IComponentProps> = ({ assets }) => {
 
     return (
         <Container gap="md" direction='column' >
-            {assetsFormated && <Card maxWidth={800}>
+            {assetsFormated && <Card maxWidth={1000}>
                 <h2>Acompanhe abaixo as transações da sua carteira</h2>
                 <Container gap='xs'>
-                    {assetsFormated.assets.map(({ id, name, image, registerDate, inactiveDate, valor, }) => (
-                        <SimpleDetailsCard src={image} key={id?.toString()}>
+                    {assetsFormated.assets.map(({ id, name, image, acquisitionRecord, date, valor, }) => (
+                        <SimpleDetailsCard full src={image} key={id?.toString()}>
                             <dl key={id}>
+                                <dt>Transação:</dt>
+                                <dd>{acquisitionRecord ? 'Compra' : 'Venda'}</dd>
+                                <dt>Data da transação:</dt>
+                                <dd>{new Date(date).toLocaleString('pt-BR')}</dd>
                                 <dt>Pokemon:</dt>
                                 <dd>{name}</dd>
-                                <dt>{`Data da ${inactiveDate ? 'venda' : 'compra'}`}</dt>
-                                <dd>{inactiveDate ? inactiveDate : registerDate}</dd>
                                 <dt>Valor:</dt>
                                 <dd>USD ${valor}</dd>
                             </dl>
