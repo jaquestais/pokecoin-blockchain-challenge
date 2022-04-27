@@ -1,10 +1,11 @@
-import { FC, MutableRefObject, ReactNode, useEffect } from 'react'
+import { FC, MutableRefObject, ReactNode, useEffect, useState } from 'react'
 import { } from '@type/CustomTheme'
 import useApi from '@hook/useApi'
 import Wallet from '@domain/Wallet'
 import { Pokemon } from '@domain/Pokemon'
 import SimpleActionCard from '@module/SimpleActionCard/SimpleActionCard'
 import Card from '@element/Card'
+import IMessage from '@type/Message'
 
 interface IComponentProps {
     pokemon?: Pokemon,
@@ -17,6 +18,7 @@ interface IComponentProps {
 
 const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, set, action, apiAction, children }) => {
     const [{ loading, response, error }, setApi] = useApi()
+    const [message, setMessage] = useState<IMessage>()
 
     const handleSubmit = () => {
         setApi(apiAction(store.current, pokemon!))
@@ -27,10 +29,12 @@ const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, set, actio
             set(response.data)
         }
 
+        error || response?.message && setMessage(error || response.message)
+
     }, [response])
 
     useEffect(() => {
-        if (response?.message) response.message = undefined
+        setMessage(undefined)
 
     }, [pokemon])
 
@@ -44,7 +48,7 @@ const PokemonInfoActionCard: FC<IComponentProps> = ({ pokemon, store, set, actio
                     image={pokemon?.image}
                     alt={`Imagem do pokemon? ${pokemon?.name}`}
                     action={action}
-                    message={error || response?.message}
+                    message={message}
                 >
                     <h3>{pokemon?.name}</h3>
                     <dl>

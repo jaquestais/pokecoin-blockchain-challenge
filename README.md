@@ -29,6 +29,7 @@
 - Implementar testes de integração da API
 - Distribuir melhor as funcionalidades da Wallet e usar mais de OO
 - Melhorar detalhes de CSS, como o Loader
+- Desacoplar o backend do MongoDB
 
 ## Notes
 - Referência que me inspirei para arquitetura: [NextJs Project Structure](https://wityan.medium.com/next-js-project-structure-1531610bed71)

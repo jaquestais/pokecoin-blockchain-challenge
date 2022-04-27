@@ -20,10 +20,12 @@ const SaleTemplate: FC<IComponentProps> = ({ store, set }) => {
 
     const handleSubmit = ({ pokemon }: any) => {
         const asset = store.current.assets.find(asset => asset.active && (asset._id === pokemon.value || pokemon.value === asset.name))
+
         if (asset) {
             setPokemon(asset as Pokemon)
             setMessage({ status: 'success', description: 'Pokemon encontrado!' })
         } else {
+            setPokemon(undefined)
             setMessage({ status: 'error', description: 'Pokemon não encontrado, tente novamente.' })
         }
     }
