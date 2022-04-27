@@ -18,12 +18,10 @@ const useApi = (inputInit?: RequestInfo): [{ response: any, loading: boolean, er
         input && fetchApi({
             input,
             callbackSuccess: (response: any) => {
-                console.log('useApi success:', response)
                 if (response?.data) setResponse(response)                
                 else setResponse({ data: response })                
                 setLoading(false)
             }, callbackError: (response: any) => {
-                console.log('useApi error:', response)
                 setError(response?.message ? response?.message : response)
                 setLoading(false)
             }

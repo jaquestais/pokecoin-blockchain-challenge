@@ -1,6 +1,5 @@
 import { Pokemon } from "@domain/Pokemon"
 import Wallet, { Asset } from "@domain/Wallet"
-import { ObjectId } from "mongodb"
 
 const requestInit: RequestInit = {}
 

@@ -6,24 +6,24 @@ import { Pokemon } from '@domain/Pokemon'
 import { SATOSHI } from '@constant/bitcoinStandard'
 import useApi from '@hook/useApi'
 import coinAPI from '@api/coinAPI/coinAPI'
+import SimpleDetailsCard from '@element/SimpleDetailsCard'
 
-const getAssetsFormated = (pokemonAssets: Pokemon[], rate: number): { totalValuation: number, assets: any[] } => {
+const getAssetsFormated = (pokemonAssets: Pokemon[], rate: number): { assets: any[] } => {
     const currentCostBasis = (asset: Pokemon) => asset.baseExperience * SATOSHI * rate
-    let totalValuation = 0
 
     const assets = pokemonAssets.map(asset => {
-        totalValuation += currentCostBasis(asset) - asset.costBasis
 
         return {
             id: asset._id,
             name: asset.name,
+            image: asset.image,
             registerDate: new Date(asset.registerDatetime).toLocaleDateString('pt-BR'),
             inactiveDate: asset.inactiveDatetime && new Date(asset.inactiveDatetime).toLocaleDateString('pt-BR'),
             valor: currentCostBasis(asset),
         }
     })
 
-    return { totalValuation, assets }
+    return { assets }
 }
 
 interface IComponentProps {
@@ -31,7 +31,7 @@ interface IComponentProps {
 }
 
 const HistoryTemplate: FC<IComponentProps> = ({ assets }) => {
-    const [assetsFormated, setAssetsFormated] = useState<{ totalValuation: number, assets: any[] }>()
+    const [assetsFormated, setAssetsFormated] = useState<{ assets: any[] }>()
     const [{ response }, setApi] = useApi()
 
     useEffect(() => {
@@ -47,22 +47,23 @@ const HistoryTemplate: FC<IComponentProps> = ({ assets }) => {
 
     return (
         <Container gap="md" direction='column' >
-            {assetsFormated && <Card maxWidth={450}>
+            {assetsFormated && <Card maxWidth={800}>
                 <h2>Acompanhe abaixo as transações da sua carteira</h2>
-                <h3>Total: USD ${assetsFormated.totalValuation}</h3>
-                {assetsFormated.assets.map(({ id, name, registerDate, inactiveDate, valor, }) => (
-                    <dl key={id}>
-                        <dt>Pokemon {name}:</dt>
-                        <dd>
-                            <div>
-                                {`Data da ${inactiveDate ? 'venda' : 'compra'}: ${inactiveDate ? inactiveDate : registerDate}`}
-                            </div>
-                            <div>
-                                Valor: USD ${valor}
-                            </div>
-                        </dd>
-                    </dl>
-                ))}
+                <Container gap='xs'>
+                    {assetsFormated.assets.map(({ id, name, image, registerDate, inactiveDate, valor, }) => (
+                        <SimpleDetailsCard src={image} key={id?.toString()}>
+                            <dl key={id}>
+                                <dt>Pokemon:</dt>
+                                <dd>{name}</dd>
+                                <dt>{`Data da ${inactiveDate ? 'venda' : 'compra'}`}</dt>
+                                <dd>{inactiveDate ? inactiveDate : registerDate}</dd>
+                                <dt>Valor:</dt>
+                                <dd>USD ${valor}</dd>
+                            </dl>
+                        </SimpleDetailsCard>
+
+                    ))}
+                </Container>
             </Card>}
         </Container>
     )
